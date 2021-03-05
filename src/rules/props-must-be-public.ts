@@ -11,6 +11,7 @@ const rule: Rule.RuleModule = {
     },
     schema: [],
     type: 'problem',
+    fixable: 'code',
   },
 
   create(context): Rule.RuleListener {
@@ -25,7 +26,10 @@ const rule: Rule.RuleModule = {
           if (isPrivate(originalNode)) {
             context.report({
               node: node,
-              message: `Class properties decorated with @Prop() cannot be private nor protected`
+              message: `Class properties decorated with @Prop() cannot be private nor protected`,
+              fix(fixer) {
+                return fixer.insertTextBefore(node.key, 'public ');
+              }
             });
           }
         }
